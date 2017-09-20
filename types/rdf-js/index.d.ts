@@ -21,7 +21,7 @@ export interface Term {
      *
      * Possible values include "NamedNode", "BlankNode", "Literal", "Variable" and "DefaultGraph".
      */
-    termType: string;
+    termType: "NamedNode" | "BlankNode" | "Literal" | "Variable" | "DefaultGraph" | string;
     /**
      * Refined by each interface which extends Term
      */
@@ -41,7 +41,7 @@ export interface NamedNode extends Term {
     /**
      * Contains the constant "NamedNode".
      */
-    termType: string;
+    termType: "NamedNode";
     /**
      * The IRI of the named node (example: `http://example.org/resource`)
      */
@@ -61,7 +61,7 @@ export interface BlankNode extends Term {
     /**
      * Contains the constant "BlankNode".
      */
-    termType: string;
+    termType: "BlankNode";
     /**
      * Blank node name as a string, without any serialization specific prefixes,
      * e.g. when parsing,
@@ -84,7 +84,7 @@ export interface Literal extends Term {
     /**
      * Contains the constant "Literal".
      */
-    termType: string;
+    termType: "Literal";
     /**
      * The text value, unescaped, without language or type (example: Brad Pitt).
      */
@@ -115,7 +115,7 @@ export interface Variable extends Term {
     /**
      * Contains the constant "Variable".
      */
-    termType: string;
+    termType: "Variable";
     /**
      * The name of the variable *without* leading ? (example: a).
      */
@@ -136,11 +136,11 @@ export interface DefaultGraph extends Term {
     /**
      * Contains the constant "DefaultGraph".
      */
-    termType: string;
+    termType: "DefaultGraph";
     /**
      * Contains an empty string as constant value.
      */
-    value: string;
+    value: "";
 
     /**
      * @param {RDF.Term} other The term to compare with.
