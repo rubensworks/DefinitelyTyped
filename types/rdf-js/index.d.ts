@@ -20,8 +20,9 @@ import { EventEmitter } from "events";
  * @see Literal
  * @see Variable
  * @see DefaultGraph
+ * @see QuadTerm
  */
-export type Term = NamedNode | BlankNode | Literal | Variable | DefaultGraph;
+export type Term = NamedNode | BlankNode | Literal | Variable | DefaultGraph | QuadTerm<any>;
 
 /**
  * Contains an IRI.
@@ -139,12 +140,32 @@ export interface DefaultGraph {
 }
 
 /**
+ * A Quad wrapped as a Term
+ */
+export interface QuadTerm<Q extends BaseQuad = Quad> {
+    /**
+     * Contains the constant "Quad".
+     */
+    termType: "Quad";
+    /**
+     * Contains an empty string as constant value.
+     */
+    value: Q;
+
+    /**
+     * @param other The term to compare with.
+     * @return True if and only if other has termType "Quad" and an equal `value`.
+     */
+    equals(other: Term | null | undefined): boolean;
+}
+
+/**
  * The subject, which is a NamedNode, BlankNode or Variable.
  * @see NamedNode
  * @see BlankNode
  * @see Variable
  */
-export type Quad_Subject = NamedNode | BlankNode | Variable;
+export type Quad_Subject = NamedNode | BlankNode | Variable | QuadTerm;
 
 /**
  * The predicate, which is a NamedNode or Variable.
@@ -160,7 +181,7 @@ export type Quad_Predicate = NamedNode | Variable;
  * @see BlankNode
  * @see Variable
  */
-export type Quad_Object = NamedNode | Literal | BlankNode | Variable;
+export type Quad_Object = NamedNode | Literal | BlankNode | Variable | QuadTerm;
 
 /**
  * The named graph, which is a DefaultGraph, NamedNode, BlankNode or Variable.
@@ -292,6 +313,14 @@ export interface DataFactory<OutQuad extends BaseQuad = Quad, InQuad extends Bas
      * @see Quad
      */
     quad(subject: InQuad['subject'], predicate: InQuad['predicate'], object: InQuad['object'], graph?: InQuad['graph']): OutQuad;
+
+    /**
+     * This method is optional.
+     * @param value The quad
+     * @return A new instance of QuadTerm.
+     * @see QuadTerm
+     */
+    quadTerm?(value: InQuad): QuadTerm<OutQuad>;
 }
 
 /* Stream Interfaces */
